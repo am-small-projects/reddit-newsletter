@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "A Nodejs service which sends out a personalized daily email newsletter at 8 am containing top 3 most voted posts (within the last 24 hours) from the user’s favorite sub-reddit channels.",
   "main": "server.js",
-  "scripts": {
-    "test": "npm test",
-    "start": "node server.js"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/afshanaman81/reddit-newsletter.git"
@@ -22,5 +18,44 @@
   "bugs": {
     "url": "https://github.com/afshanaman81/reddit-newsletter/issues"
   },
-  "homepage": "https://github.com/afshanaman81/reddit-newsletter#readme"
+  "homepage": "https://github.com/afshanaman81/reddit-newsletter#readme",
+  "scripts": {
+    "test": "npm test",
+    "start": "node server.js",
+    "start:dev": "nodemon server.js",
+    "prettier-watch": "onchange '**/*.js' -- prettier --write {{changed}}"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "dotenv": "^8.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-vue": "^6.2.1",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.8",
+    "mocha": "^6.1.4",
+    "nodemon": "^2.0.2",
+    "nyc": "^14.1.0",
+    "prettier": "^1.17.0",
+    "sinon": "^7.3.2",
+    "supertest": "^4.0.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm test"
+    }
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,css,md}": "prettier --write"
+  }
 }
