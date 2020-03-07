@@ -1,0 +1,26 @@
+{
+  "name": "reddit-newsletter",
+  "version": "1.0.0",
+  "description": "A Nodejs service which sends out a personalized daily email newsletter at 8 am containing top 3 most voted posts (within the last 24 hours) from the user’s favorite sub-reddit channels.",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afshanaman81/reddit-newsletter.git"
+  },
+  "keywords": [
+    "nodejs",
+    "api",
+    "newsletter",
+    "reddit"
+  ],
+  "author": "Afshan Aman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/afshanaman81/reddit-newsletter/issues"
+  },
+  "homepage": "https://github.com/afshanaman81/reddit-newsletter#readme"
+}
