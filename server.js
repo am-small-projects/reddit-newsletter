@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
-const logger = require('./logger');
+const logger = require('./src/logger');
 
 const app = express();
 const PORT = 5000;
@@ -36,7 +36,7 @@ app.use(
 
 // Routes
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-app.use('/', require('./router'));
+app.use('/', require('./src/router'));
 
 // final error handling
 app.use((req, res, next) => {
