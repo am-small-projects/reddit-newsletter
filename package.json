@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/afshanaman81/reddit-newsletter#readme",
   "scripts": {
-    "test": "npm test",
+    "test": "",
     "start": "node ./src/index.js",
     "start:dev": "nodemon ./src/index.js",
     "prettier-watch": "onchange '**/*.js' -- prettier --write {{changed}}"
