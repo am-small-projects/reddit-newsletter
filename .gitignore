@@ -104,3 +104,9 @@ dist
 .tern-port
 
 *.DS_Store
+
+# liquibase properties file with user/pass/host/schemas
+liquibase*.properties
+
+# postgresql driver
+*.jar

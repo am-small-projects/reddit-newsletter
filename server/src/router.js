@@ -1,106 +1,157 @@
-const router = require('express').Router();
-const asyncWrapper = require('./asyncWrapper.middleware');
-const logger = require('./logger');
-/**
- * @swagger
- * definitions:
- *  User:
- *      type: "object"
- *      properties:
- *          id:
- *              type: "integer"
- *          first_name:
- *              type: "string"
- *          last_name:
- *              type: "string"
- */
+const router = require("express").Router();
+const asyncWrapper = require("../utils/asyncWrapper.middleware");
+const logger = require("../utils/logger");
+const controller = require("./controller");
 
 /**
  * @swagger
  * /user:
  *  post:
- *      description: POST user
+ *      summary: POST new user
  *      parameters:
- *          - name: user
- *            in: formData
+ *          - name: firstName
+ *            in: body
  *            required: true
  *            schema:
- *              $ref: "#/definitions/User"
+ *              type: "string"
+ *          - name: lastName
+ *            in: body
+ *            required: true
+ *            schema:
+ *              type: "string"
+ *          - name: email
+ *            in: body
+ *            schema:
+ *              type: "string"
+ *          - name: subscribed
+ *            in: body
+ *            required: true
+ *            schema:
+ *              type: "boolean"
  *      responses:
  *          200:
- *              description: User created successfully
+ *              description: "User created successfully"
  *          400:
  *              description: "Bad request data"
+ * 			500:
+ * 				description: "Server Error"
  */
 router.post(
-  '/user',
+  "/user",
   asyncWrapper(async (req, res) => {
-    const { user } = req.body;
-    logger.info('user:', user);
-    return res.status(200).json('Creating user');
-  }),
+    const { firstName, lastName, email, timezone } = req.body;
+    // TODO: validate user, return 400 if bad request
+    const userAdded = await controller.addUser(
+      firstName,
+      lastName,
+      email,
+      timezone
+    );
+    if (userAdded) return res.status(200).json("User created successfully");
+    else return res.status(500).json("Server Error");
+  })
 );
 
 /**
  * @swagger
- * /user/:id:
+ * /user/{id}:
  *  patch:
- *      description: Update user by id
+ *      summary: "Update user by id"
  *      parameters:
- *          - name: id
- *            in: query
- *            type: number
+ *          - name: firstName
+ *            in: body
  *            required: true
- *      request:
- *          'user':
- *              name: String
+ *            schema:
+ *              type: "string"
+ *          - name: lastName
+ *            in: body
+ *            required: true
+ *            schema:
+ *              type: "string"
+ *          - name: email
+ *            in: body
+ *            schema:
+ *              type: "string"
+ *          - name: subscribed
+ *            in: body
+ *            required: true
+ *            schema:
+ *              type: "boolean"
  *      responses:
- *          '201':
- *              description: User updated successfully
+ *          201:
+ *              description: "User updated successfully"
+ *          400:
+ *              description: "Bad request data"
+ * 			500:
+ * 				description: "Server Error"
  */
 router.patch(
-  '/user/:id',
+  "/user/:id",
   asyncWrapper(async (req, res) => {
-    const { user } = req.body;
-    logger.info(user);
-    return res.status(201).json('Updating user');
-  }),
+    const { id } = req.params;
+    const { firstName, lastName, email, timezone } = req.body;
+    // TODO: validate input, return 400 if bad request
+    const userUpdated = await controller.updateUser(
+      id,
+      firstName,
+      lastName,
+      email,
+      timezone
+    );
+    if (userUpdated) return res.status(201).json("User updated successfully");
+    else return res.status(500).json("Server Error");
+  })
 );
 
 router.post(
-  '/user/:id/favorites/reddit',
+  "/user/newsletter/subscribe",
   asyncWrapper(async (req, res) => {
-    const { reddit } = req.body;
-    logger.info(reddit);
-    return res.json('Adding Fav reddit');
-  }),
+    const { email, timezone } = req.body;
+    // TODO: validate input, return 400 if bad request
+    const userSubscribed = await controller.addUser(null, null, email, timezone, true);
+    if (userSubscribed) {
+      return res.status(200).json("User subscribed to Newsletter");
+    } else return res.status(500).json("Server Error");
+  })
 );
 
 router.patch(
-  '/user/favorites/reddit',
+  "/user/:email/newsletter/preferences",
   asyncWrapper(async (req, res) => {
-    const { reddit } = req.body;
-    logger.info(reddit);
-    return res.json('Updating Fav reddit');
-  }),
+    const { subscribe } = req.body;
+    const subscribed = subscribe == "yes" ? true : false;
+    const { email } = req.params;
+    // TODO: validate input, return 400 if bad request
+    const userUpdated = await controller.updateSubscription(email, subscribed);
+
+    // respond to the client
+    if (userUpdated)
+      return res.status(201).json("User preferences updated successfully");
+    else return res.status(500).json("Server Error");
+  })
 );
 
 router.post(
-  '/user/newsletter/subscribe',
+  "/user/:id/favorites/reddit/channel",
   asyncWrapper(async (req, res) => {
-    const { email } = req.body;
-    logger.info(email);
-    return res.json('Subscribing to Newsletter');
-  }),
+    const { id } = req.params;
+    const { type, url } = req.body;
+    // TODO: validate input, return 400 if bad request
+    const channelAdded = await controller.addFavoriteChannel(id, type, url);
+    if (channelAdded)
+      return res.status(200).json("Added favorite reddit channel");
+    else return res.status(500).json("Server Error");
+  })
 );
-
-router.patch(
-  '/user/newsletter/preferences',
+/*
+router.delete(
+  "/user/:userId/favorites/reddit/channel/:channelId",
   asyncWrapper(async (req, res) => {
-    const { preferences } = req.body;
-    logger.info(preferences);
-    return res.json('Updating Newsletter Preferences');
-  }),
+    const { reddit } = req.body;
+    logger.info(reddit);
+    return res.json("Deleting Fav reddit");
+  })
 );
+*/
 
 module.exports = router;
