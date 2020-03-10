@@ -52,5 +52,5 @@ app.listen(PORT, () => {
       URL: http://localhost:${PORT}
       API Documentation: http://localhost:${PORT}/api-docs/`);
 
-  service.setSchedules();
+  service.newsletterService();
 });

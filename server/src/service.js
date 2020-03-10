@@ -10,7 +10,26 @@ const logger = require("../utils/logger");
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const service = {
-  setSchedules: async () => {
+  newsletterService: async () => {
+    // get distinct timezones from the database
+    const timezones = await serviceUtils.getTimezones();
+    // schedule the jobs for each timezone
+    await service.scheduleJobs(timezones);
+  },
+  scheduleJobs: async timezones => {
+    for (const row of timezones) {
+      const { timezone } = row;
+      // get recepients for each timezone
+      const recepients = await serviceUtils.getRecipients(timezone);
+      // set cron job for each timezone
+      const schedule = serviceUtils.setCronJob(timezone, recepients);
+      logger.info(`Cron Job set for timezone ${timezone}`);
+    }
+  }
+};
+
+const serviceUtils = {
+  getTimezones: async () => {
     let timezones = [];
     const query = `SELECT DISTINCT timezone FROM reddit_newsletter.user`;
     try {
@@ -20,44 +39,50 @@ const service = {
       }
     } catch (err) {
       logger.error(err.message);
+      timezones = null;
     }
 
-    // schedule the jobs
-    await service.scheduleJobs(timezones);
+    console.log(`timezones: `);
+    console.log(timezones);
+    return timezones;
   },
-  scheduleJobs: async timezones => {
-    for (const row of timezones) {
-      const { timezone } = row;
-      let recepients = [];
-      // get recepients for each timezone
-      const query =
-        "SELECT DISTINCT email FROM reddit_newsletter.user WHERE timezone = $1";
-      try {
-        const result = await dbConn.query(query, [timezone]);
-        if (result.rowCount > 0) {
-          recepients = result.rows;
-        }
-      } catch (err) {
-        logger.error(err.message);
+  getRecipients: async timezone => {
+    let recepients = [];
+    const query =
+      "SELECT DISTINCT email FROM reddit_newsletter.user WHERE timezone = $1";
+    try {
+      const result = await dbConn.query(query, [timezone]);
+      if (result.rowCount > 0) {
+        recepients = result.rows;
       }
-
-      cron.schedule(
-        "0 8 * * *",
-        async () => {
-          logger.info(
-            `Sending email daily at 8 AM of ${timezone} timezone. 
-            Server time when it happend was ${new Date()}`
-          );
-          await service.sendEmails(recepients);
-        },
-        {
-          scheduled: true,
-          timezone
-        }
-      );
+    } catch (err) {
+      logger.error(err.message);
+      recepients = null;
     }
+
+    console.log("timezone: ", timezone);
+    console.log(`recipients: `);
+    console.log(recepients);
+    return recepients;
   },
-  sendEmails: async recepients => {
+  setCronJob: (timezone, recepients) => {
+    logger.info("Setting cron job");
+    cron.schedule(
+      "0 8 * * *",
+      () => {
+        logger.info(
+          `Sending email daily at 8 AM of ${timezone} timezone. 
+            Server time when it happend was ${new Date()}`
+        );
+        serviceUtils.sendEmails(recepients);
+      },
+      {
+        scheduled: true,
+        timezone
+      }
+    );
+  },
+  sendEmails: recepients => {
     for (let r of recepients) {
       log.info(r.email);
       const msg = {
