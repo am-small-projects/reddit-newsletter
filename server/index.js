@@ -5,6 +5,7 @@ const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const service = require("./src/service");
 const logger = require("./utils/logger");
+// const dbConn = require("./utils/dbConnection");
 
 const app = express();
 const PORT = 5000;
@@ -46,11 +47,12 @@ app.use((req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  logger.info(`
-      App is Listening on:
-      ENV: ${process.env.NODE_ENV}
-      URL: http://localhost:${PORT}
-      API Documentation: http://localhost:${PORT}/api-docs/`);
+  logger.info({
+    Welcome: "The Reddit Newsletter App is running",
+    ENV: process.env.NODE_ENV,
+    URL: `http://localhost:${PORT}`,
+    Documentation: `http://localhost:${PORT}/api-docs/`
+  });
 
   service.newsletterService();
 });

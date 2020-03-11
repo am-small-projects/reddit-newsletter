@@ -21,8 +21,8 @@
   "homepage": "https://github.com/afshanaman81/reddit-newsletter#readme",
   "scripts": {
     "test": "",
-    "start": "node server.js",
-    "start:dev": "nodemon server.js",
+    "start": "node ./server/index.js",
+    "start:dev": "nodemon ./server/index.js",
     "prettier-watch": "onchange '**/*.js' -- prettier --write {{changed}}"
   },
   "devDependencies": {

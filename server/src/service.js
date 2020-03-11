@@ -9,25 +9,6 @@ const logger = require("../utils/logger");
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-const service = {
-  newsletterService: async () => {
-    // get distinct timezones from the database
-    const timezones = await serviceUtils.getTimezones();
-    // schedule the jobs for each timezone
-    await service.scheduleJobs(timezones);
-  },
-  scheduleJobs: async timezones => {
-    for (const row of timezones) {
-      const { timezone } = row;
-      // get recepients for each timezone
-      const recepients = await serviceUtils.getRecipients(timezone);
-      // set cron job for each timezone
-      const schedule = serviceUtils.setCronJob(timezone, recepients);
-      logger.info(`Cron Job set for timezone ${timezone}`);
-    }
-  }
-};
-
 const serviceUtils = {
   getTimezones: async () => {
     let timezones = [];
@@ -41,9 +22,6 @@ const serviceUtils = {
       logger.error(err.message);
       timezones = null;
     }
-
-    console.log(`timezones: `);
-    console.log(timezones);
     return timezones;
   },
   getRecipients: async timezone => {
@@ -60,9 +38,6 @@ const serviceUtils = {
       recepients = null;
     }
 
-    console.log("timezone: ", timezone);
-    console.log(`recipients: `);
-    console.log(recepients);
     return recepients;
   },
   setCronJob: (timezone, recepients) => {
@@ -84,7 +59,6 @@ const serviceUtils = {
   },
   sendEmails: recepients => {
     for (let r of recepients) {
-      log.info(r.email);
       const msg = {
         to: r.email,
         from: "info@reddit-newsletter.com",
@@ -93,6 +67,36 @@ const serviceUtils = {
         html: "<strong>and easy to do anywhere, even with Node.js</strong>"
       };
       sgMail.send(msg);
+    }
+  }
+};
+
+const service = {
+  newsletterService: async () => {
+    console.log(`
+    ********** Reddit Newsletter Service **********
+    `);
+    // get distinct timezones from the database
+    const timezones = await serviceUtils.getTimezones();
+    logger.info(`timezones: `);
+    logger.info(timezones);
+
+    // schedule the jobs for each timezone
+    await service.scheduleJobs(timezones);
+  },
+  scheduleJobs: async timezones => {
+    for (const row of timezones) {
+      const { timezone } = row;
+      // get recepients for each timezone
+      const recepients = await serviceUtils.getRecipients(timezone);
+
+      logger.info(`timezone: ${timezone}`);
+      logger.info(`recipients: `);
+      logger.info(recepients);
+
+      // set cron job for each timezone
+      serviceUtils.setCronJob(timezone, recepients);
+      logger.info(`Cron Job set for timezone ${timezone}`);
     }
   }
 };
