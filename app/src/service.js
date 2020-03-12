@@ -58,12 +58,10 @@ const serviceUtils = {
   },
   getTopPosts: async (channels, count) => {
     let posts = [];
-    const redditBaseUrl = "http://api.reddit.com/r/"; // format: "http://www.reddit.com/r/subreddit/top/.json?limit=3";
+    // format: "http://www.reddit.com/r/subreddit/top/.json?limit=3";
     for (const c of channels) {
       try {
-        const result = await axios.get(
-          `${c.channel_url}/top.json?limit=${count}`
-        );
+        const result = await axios.get(`${c.channel_url}/top.json?limit=${count}`);
         const topPosts = [];
         for (const p of result.data.data.children) {
           const post = {

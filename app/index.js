@@ -24,13 +24,13 @@ const swaggerOptions = {
       version: "1.0.0"
     }
   },
-  apis: ["./server/src/router.js"]
+  apis: ["./src/router.js"]
 };
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 // set view engine to handlebars
-app.set("views", path.join(__dirname, "../views"));
-app.use(express.static(path.join(__dirname, "../images"))); 
+app.set("views", path.join(__dirname, "./views"));
+app.use(express.static(path.join(__dirname, "./images")));
 app.engine("handlebars", hbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
@@ -60,9 +60,10 @@ app.listen(PORT, () => {
     ENV: process.env.NODE_ENV,
     URL: `http://localhost:${PORT}`,
     Documentation: `http://localhost:${PORT}/api-docs/`,
-    DBConnection: process.env.DATABASE_URL || ''
+    DBConnection: process.env.DATABASE_URL || ""
   });
 
+  console.log(process.env.SENDGRID_API_KEY);
   // setup cron jobs for all timezones with the existing recipients list
-  service.newsletterService();
+  // service.newsletterService();
 });
