@@ -42,5 +42,8 @@ psql postgres://postgres:postgres@127.0.0.1:5432/reddit_newsletter
 # Interact with the API via Postman
 User the provided postman collection to hit various endpoints and check that the data is stored in the database. 
 
-# Viw the API Documentation
+# View the newsletter template
+Visit `http://localhost:5000/preview`
+
+# View the API Documentation
 Visit `http://localhost:5000/api-docs/`
