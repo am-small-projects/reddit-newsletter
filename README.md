@@ -32,6 +32,13 @@ docker exec -it CONTAINER_NAME /bin/bash
 psql postgres://postgres:postgres@127.0.0.1:5432/reddit_newsletter
 ```
 
+## Interact with the schemas and tables within the `reddit_newsletter` database
+- set default schema: `SET search_path TO reddit_newsletter;`
+- see list of tables: `\dt`
+- see records of the `user` table: `SELECT * FROM "user";`
+- exit psql: `\q`
+- exit the contrainer: `exit`
+
 # Interact with the API via Postman
 User the provided postman collection to hit various endpoints and check that the data is stored in the database. 
 

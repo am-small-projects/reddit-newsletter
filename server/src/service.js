@@ -1,9 +1,7 @@
 // for each user, according to their timezone, send daily email at their 8 AM local time
-
-// https://www.npmjs.com/package/node-schedule
-
 const cron = require("node-cron");
 const sgMail = require("@sendgrid/mail");
+const axios = require("axios");
 const dbConn = require("../utils/dbConnection");
 const logger = require("../utils/logger");
 
@@ -24,6 +22,24 @@ const serviceUtils = {
     }
     return timezones;
   },
+  getChannels: async () => {
+    let channels = [];
+    const query = `SELECT DISTINCT channel_type, channel_url
+                    FROM reddit_newsletter.user u
+                    JOIN reddit_newsletter.reddit_favorites f ON (u.id = f.user_id)
+                    JOIN reddit_newsletter.reddit_channel c ON (f.channel_id = c.id)
+                    WHERE u.subscribed = TRUE`;
+    try {
+      const result = await dbConn.query(query);
+      if (result.rowCount > 0) {
+        channels = result.rows;
+      }
+    } catch (err) {
+      logger.error(err.message);
+      channels = null;
+    }
+    return channels;
+  },
   getRecipients: async timezone => {
     let recepients = [];
     const query =
@@ -39,6 +55,38 @@ const serviceUtils = {
     }
 
     return recepients;
+  },
+  getTopPosts: async (channels, count) => {
+    let posts = [];
+    const redditBaseUrl = "http://api.reddit.com/r/"; // format: "http://www.reddit.com/r/subreddit/top/.json?limit=3";
+    for (const c of channels) {
+      try {
+        const result = await axios.get(
+          `${c.channel_url}/top.json?limit=${count}`
+        );
+        const topPosts = [];
+        for (const p of result.data.data.children) {
+          const post = {
+            title: p.data.title,
+            url: p.data.url,
+            thumbnail: p.data.thumbnail,
+            author: p.data.author,
+            rating: p.data.ups
+          };
+          topPosts.push(post);
+        }
+        posts.push({
+          channel: c.channel_type,
+          topPosts
+        })
+
+      } catch (err) {
+        logger.error(err.message);
+        posts = null;
+      }
+    }
+
+    return posts;
   },
   setCronJob: (timezone, recepients) => {
     logger.info("Setting cron job");
@@ -80,6 +128,16 @@ const service = {
     const timezones = await serviceUtils.getTimezones();
     logger.info(`timezones: `);
     logger.info(timezones);
+
+    // get distinct reddit channels among all the subscribed users
+    const redditChannels = await serviceUtils.getChannels();
+    logger.info(`channels:`);
+    logger.info(redditChannels);
+
+    // get top 3 posts for each channel
+    const topPosts = await serviceUtils.getTopPosts(redditChannels, 3);
+    logger.info(`top posts:`);
+    logger.info(topPosts);
 
     // schedule the jobs for each timezone
     await service.scheduleJobs(timezones);

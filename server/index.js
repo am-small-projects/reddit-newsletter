@@ -1,15 +1,17 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const path = require("path");
+const hbs = require("express-handlebars");
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const service = require("./src/service");
 const logger = require("./utils/logger");
-// const dbConn = require("./utils/dbConnection");
 
 const app = express();
 const PORT = 5000;
 
+// Swagger Setup
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
@@ -19,13 +21,18 @@ const swaggerOptions = {
         name: "Afshan Aman"
       },
       servers: ["http://localhost:5000"],
-      version: "1.0.1"
+      version: "1.0.0"
     }
   },
-  apis: ["./src/router.js"]
+  apis: ["./server/src/router.js"]
 };
-
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
+
+// set view engine to handlebars
+app.set("views", path.join(__dirname, "../views"));
+app.use(express.static(path.join(__dirname, "../images"))); 
+app.engine("handlebars", hbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 
 // Middleware
 app.use(bodyParser.json());
@@ -46,13 +53,16 @@ app.use((req, res, next) => {
   next(err);
 });
 
+// Start the server
 app.listen(PORT, () => {
   logger.info({
     Welcome: "The Reddit Newsletter App is running",
     ENV: process.env.NODE_ENV,
     URL: `http://localhost:${PORT}`,
-    Documentation: `http://localhost:${PORT}/api-docs/`
+    Documentation: `http://localhost:${PORT}/api-docs/`,
+    DBConnection: process.env.DATABASE_URL || ''
   });
 
+  // setup cron jobs for all timezones with the existing recipients list
   service.newsletterService();
 });
