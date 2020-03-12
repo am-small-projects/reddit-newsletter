@@ -111,4 +111,4 @@ liquibase*.properties
 # postgresql driver
 *.jar
 
-*notes.md
+**notes.md
