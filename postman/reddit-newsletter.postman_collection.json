@@ -1,0 +1,245 @@
+{
+	"info": {
+		"_postman_id": "5d2a5e6c-49b8-44d0-ac79-b0b5bb6b6da9",
+		"name": "reddit-newsletter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add New User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "37ddef29-0daf-4f98-98ef-32ad5384b1d9",
+						"exec": [
+							"const response  = JSON.parse(responseBody);",
+							"",
+							"postman.setEnvironmentVariable(\"id\", response.userId)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "firstName",
+							"value": "{{firstName}}",
+							"type": "text"
+						},
+						{
+							"key": "lastName",
+							"value": "{{lastName}}",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "{{email}}",
+							"type": "text"
+						},
+						{
+							"key": "timezone",
+							"value": "{{timezone}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:5000/user",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User by id",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "firstName",
+							"value": "{{newFirstName}}",
+							"type": "text"
+						},
+						{
+							"key": "lastName",
+							"value": "{{newLastName}}",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "something@gmail.com",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:5000/user/{{id}}",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Subscribe to Newsletter",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "{{email}}",
+							"type": "text"
+						},
+						{
+							"key": "timezone",
+							"value": "{{timezone}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:5000/user/newsletter/subscribe",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user",
+						"newsletter",
+						"subscribe"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User Newsletter subscription by email id",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "subscribe",
+							"value": "yes",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:5000/user/{{email}}/newsletter/preferences",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user",
+						"{{email}}",
+						"newsletter",
+						"preferences"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Favorite Channel",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "type",
+							"value": "{{type2}}",
+							"type": "text"
+						},
+						{
+							"key": "url",
+							"value": "{{url2}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:5000/user/{{id}}/favorites/reddit/channel",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"user",
+						"{{id}}",
+						"favorites",
+						"reddit",
+						"channel"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
