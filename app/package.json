@@ -20,14 +20,14 @@
   },
   "homepage": "https://github.com/afshanaman81/reddit-newsletter#readme",
   "scripts": {
-    "test": "",
     "start": "node index.js",
     "start:dev": "nodemon index.js",
+    "test": "nyc mocha --exit --timeout=20000 test/unit --recursive",
+    "lint": "eslint --ext=js .",
     "prettier-watch": "onchange '**/*.js' -- prettier --write {{changed}}"
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "chai-as-promised": "^7.1.1",
     "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.20.1",

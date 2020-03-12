@@ -1,12 +1,12 @@
-require('dotenv').config();
-const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
-const hbs = require('express-handlebars');
-const swaggerJSDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
-const service = require('./src/service');
-const logger = require('./utils/logger');
+require("dotenv").config();
+const express = require("express");
+const bodyParser = require("body-parser");
+const path = require("path");
+const hbs = require("express-handlebars");
+const swaggerJSDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+const service = require("./src/service");
+const logger = require("./utils/logger");
 
 const app = express();
 const PORT = 5000;
@@ -15,40 +15,40 @@ const PORT = 5000;
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
-      title: 'Reddit Newsletter API',
-      description: '',
+      title: "Reddit Newsletter API",
+      description: "",
       contact: {
-        name: 'Afshan Aman',
+        name: "Afshan Aman"
       },
-      servers: ['http://localhost:5000'],
-      version: '1.0.0',
-    },
+      servers: ["http://localhost:5000"],
+      version: "1.0.0"
+    }
   },
-  apis: ['./src/router.js'],
+  apis: ["./src/router.js"]
 };
 const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 // set view engine to handlebars
-app.set('views', path.join(__dirname, './views'));
-app.use(express.static(path.join(__dirname, './images')));
-app.engine('handlebars', hbs({ defaultLayout: 'main' }));
-app.set('view engine', 'handlebars');
+app.set("views", path.join(__dirname, "./views"));
+app.use(express.static(path.join(__dirname, "./images")));
+app.engine("handlebars", hbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 
 // Middleware
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
-    extended: true,
-  }),
+    extended: true
+  })
 );
 
 // Routes
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-app.use('/', require('./src/router'));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use("/", require("./src/router"));
 
 // final error handling
 app.use((req, res, next) => {
-  const err = new Error('Not Found');
+  const err = new Error("Not Found");
   err.status = 404;
   next(err);
 });
@@ -56,14 +56,16 @@ app.use((req, res, next) => {
 // Start the server
 app.listen(PORT, () => {
   logger.info({
-    Welcome: 'The Reddit Newsletter App is running',
+    Welcome: "The Reddit Newsletter App is running",
     ENV: process.env.NODE_ENV,
     URL: `http://localhost:${PORT}`,
     API_Documentation: `http://localhost:${PORT}/api-docs/`,
-    DB_Connection: process.env.DATABASE_URL || '',
-    SENDGRID_API_KEY: process.env.SENDGRID_API_KEY || '',
+    DB_Connection: process.env.DATABASE_URL || "",
+    SENDGRID_API_KEY: process.env.SENDGRID_API_KEY || ""
   });
 
   // setup cron jobs for all timezones with the existing recipients list
   service.newsletterService();
 });
+
+module.exports = app;

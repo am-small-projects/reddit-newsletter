@@ -45,7 +45,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="color: #153643; font-family: Arial, sans-serif; font-size: 24px; text-align:center">
+                                    <td style="color: #494244; font-family: Arial, sans-serif; font-size: 24px; text-align:center">
                                         <h1>Reddit Newsletter</h1>
                                     </td>
                                 </tr>
@@ -57,8 +57,8 @@
                         <td align="center" style="padding: 40px 0 30px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">
                             <table border="0" cellpadding="0" cellspacing="0" width="100%">
                                 <tr>
-                                    <td style="font-family: Arial, sans-serif; font-size: 24px;" width="75%">
-                                        Hello {{content.userName}}    
+                                    <td style="font-family: Calibri; font-size: 24px;" width="75%">
+                                        Hello {{content.userName}},    
                                         <br>
                                         See yesterday’s top voted posts from your favorite channel                                   
                                     </td>
@@ -66,18 +66,25 @@
                                 {{#each content.reddit}}
                                 <tr>
                                     <td style="font-family: Arial, sans-serif; font-size: 20px; padding: 40px 0 30px 0;" width="75%">
-                                        {{this.category}}: {{this.url}} 
-                                        <br>
-                                        {{this.title}}
-                                        <br>
-                                        {{this.text}}                                        
+                                        <p style="border: 5px solid black; font-size: 24px; padding: 20px; text-aling: center; color: rgb(97, 91, 91);">
+                                            {{this.channel}}: <a href={{this.url}} target="_blank">{{this.url}}</a>
+                                        </p>
+                                        {{#each this.topPosts}}
+                                        <div>
+                                            {{#if this.thumbnail}}<img src={{this.thumbnail}} style="display: block; margin: 0 auto; width: 50%;">{{/if}}
+                                            <br>
+                                            {{this.title}}
+                                            <br>
+                                            Ratings: {{this.rating}}  
+                                            <hr>
+                                        </div>    
+                                        {{/each}}
                                     </td>                                    
                                 </tr>  
                                 {{/each}}                              
                             </table>
                         </td>
                     </tr>
-
 
                     <tr>
                         <td bgcolor="#ee4c50" style="padding: 30px 30px 30px 30px;">

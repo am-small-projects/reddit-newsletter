@@ -14,12 +14,13 @@ const controller = {
                     VALUES ($1, $2, $3, $4, $5)
                     ON CONFLICT (email) DO UPDATE
                     SET                     
-                        subscribed  = EXCLUDED.subscribed   
+                        subscribed  = EXCLUDED.subscribed  
+                    RETURNING id 
                     `;
     const values = [firstName, lastName, email, timezone, subscribed];
     try {
       const result = await dbConn.query(query, values);
-      if (result.rowCount > 0) return true;
+      if (result.rowCount > 0) return result.rows[0].id;
     } catch (err) {
       logger.error(err.message);
     }

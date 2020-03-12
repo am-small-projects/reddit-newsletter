@@ -4,25 +4,12 @@ const logger = require("../utils/logger");
 const controller = require("./controller");
 const service = require("./service");
 
+const posts = require("../mock/topPosts.json");
+
 router.get("/preview", (req, res) => {
   const content = {
     userName: "Afshan",
-    reddit: [
-      {
-        title: "newsy reddit",
-        text: "South Park' creators issue a mocking apology to China after the show was reportedly banned in the country",
-        url: "http://xyz/reddit",
-        category: "News",
-        rating: 9000
-      },
-      {
-        title: "funny reddit",
-        text: "The US Just Blacklisted China’s Most Valuable Facial Recognition Startups Over Human Rights Abuses",
-        url: "http://xyz/reddit",
-        category: "Funny",
-        rating: 5000
-      }
-    ]
+    reddit: posts
   };
   res.render("email", { content });
 });
@@ -67,14 +54,17 @@ router.post(
 
     const { firstName, lastName, email, timezone } = req.body;
     // TODO: validate user, return 400 if bad request
-    const userAdded = await controller.addUser(
+    const userId = await controller.addUser(
       firstName,
       lastName,
       email,
       timezone
     );
-    if (userAdded) return res.status(200).json("User created successfully");
-    else return res.status(500).json("Server Error");
+    if (userId)
+      return res
+        .status(200)
+        .json({ message: "User created successfully", userId });
+    else return res.status(500).json({ message: "Server Error" });
   })
 );
 
@@ -128,8 +118,9 @@ router.patch(
       email,
       timezone
     );
-    if (userUpdated) return res.status(201).json("User updated successfully");
-    else return res.status(500).json("Server Error");
+    if (userUpdated)
+      return res.status(201).json({ message: "User updated successfully" });
+    else return res.status(500).json({ message: "Server Error" });
   })
 );
 
@@ -165,18 +156,15 @@ router.post(
 
     const { email, timezone } = req.body;
     // TODO: validate input, return 400 if bad request
-    const userSubscribed = await controller.addUser(
-      null,
-      null,
-      email,
-      timezone,
-      true
-    );
-    if (userSubscribed) {
+    const userId = await controller.addUser(null, null, email, timezone, true);
+    if (userId) {
       // when a subscription is created, update the scheduled jobs to include/exclude the emails
       service.newsletterService();
-      return res.status(200).json("User subscribed to newsletter successfully");
-    } else return res.status(500).json("Server Error");
+      return res.status(200).json({
+        message: "User subscribed to newsletter successfully",
+        userId
+      });
+    } else return res.status(500).json({ message: "Server Error" });
   })
 );
 
@@ -222,8 +210,10 @@ router.patch(
 
     // respond to the client
     if (userUpdated)
-      return res.status(201).json("User preferences updated successfully");
-    else return res.status(500).json("Server Error");
+      return res
+        .status(201)
+        .json({ message: "User preferences updated successfully" });
+    else return res.status(500).json({ message: "Server Error" });
   })
 );
 
@@ -239,10 +229,10 @@ router.post(
     // TODO: validate input, return 400 if bad request
     const channelAdded = await controller.addFavoriteChannel(id, type, url);
     if (channelAdded)
-      return res
-        .status(200)
-        .json("Favorite reddit channel for user added successfully");
-    else return res.status(500).json("Server Error");
+      return res.status(200).json({
+        message: "Favorite reddit channel for user added successfully"
+      });
+    else return res.status(500).json({ message: "Server Error" });
   })
 );
 /*
