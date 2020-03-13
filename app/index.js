@@ -30,9 +30,11 @@ const swaggerDocs = swaggerJSDoc(swaggerOptions);
 
 // set view engine to handlebars
 app.set("views", path.join(__dirname, "./views"));
-app.use(express.static(path.join(__dirname, "./images")));
 app.engine("handlebars", hbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
+
+// set path for fixtures
+app.use(express.static(path.join(__dirname, "./public")));
 
 // Middleware
 app.use(bodyParser.json());

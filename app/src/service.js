@@ -69,7 +69,7 @@ const serviceUtils = {
             url: p.data.url,
             thumbnail: p.data.thumbnail,
             author: p.data.author,
-            rating: p.data.ups
+            rating: Math.ceil(p.data.ups/1000)
           };
           topPosts.push(post);
         }
@@ -83,7 +83,6 @@ const serviceUtils = {
         posts = null;
       }
     }
-
     return posts;
   },
   setCronJob: (timezone, recepients) => {

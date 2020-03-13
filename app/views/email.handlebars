@@ -1,123 +1,81 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<title>Reddit Newsletter For Techies</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Reddit Newsletter For Techies</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+
 </head>
-<body style="margin: 0; padding: 0;">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%"> 
-        <tr>
-            <td style="padding: 10px 0 30px 0;">
-                <table align="center" border="0" cellpadding="0" cellspacing="0" width="900" style="border: 1px solid #cccccc; border-collapse: collapse;">
-                    
-                    <tr>
-                        <td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%">                                                            
-                                <tr>
-                                    <td>
-                                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                            <tr>
-                                                <td width="260" valign="top">
-                                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                                        <tr>
-                                                            <td>
-                                                                <img src="audibene.png" alt="" width="100%" height="140" style="display: block;" />
-                                                            </td>
-                                                        </tr>
-                                                        
-                                                    </table>
-                                                </td>
-                                                <td style="font-size: 0; line-height: 0;" width="20">
-                                                    &nbsp;
-                                                </td>
-                                                <td width="260" valign="top">
-                                                    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                                        <tr>
-                                                            <td>
-                                                                <img src="goodhearing.jpeg" alt="" width="100%" height="140" style="display: block;" />
-                                                            </td>
-                                                        </tr>                                                        
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="color: #494244; font-family: Arial, sans-serif; font-size: 24px; text-align:center">
-                                        <h1>Reddit Newsletter</h1>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
+<body>
 
-                    <tr>
-                        <td align="center" style="padding: 40px 0 30px 0; color: #153643; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                <tr>
-                                    <td style="font-family: Calibri; font-size: 24px;" width="75%">
-                                        Hello {{content.userName}},    
-                                        <br>
-                                        See yesterday’s top voted posts from your favorite channel                                   
-                                    </td>
-                                </tr>
-                                {{#each content.reddit}}
-                                <tr>
-                                    <td style="font-family: Arial, sans-serif; font-size: 20px; padding: 40px 0 30px 0;" width="75%">
-                                        <p style="border: 5px solid black; font-size: 24px; padding: 20px; text-aling: center; color: rgb(97, 91, 91);">
-                                            {{this.channel}}: <a href={{this.url}} target="_blank">{{this.url}}</a>
-                                        </p>
-                                        {{#each this.topPosts}}
-                                        <div>
-                                            {{#if this.thumbnail}}<img src={{this.thumbnail}} style="display: block; margin: 0 auto; width: 50%;">{{/if}}
-                                            <br>
-                                            {{this.title}}
-                                            <br>
-                                            Ratings: {{this.rating}}  
-                                            <hr>
-                                        </div>    
-                                        {{/each}}
-                                    </td>                                    
-                                </tr>  
-                                {{/each}}                              
-                            </table>
-                        </td>
-                    </tr>
+    <div class="header">
+        <div class="grid-container">
+            <img src="/images/audibene.png" alt="" class="left header-image" />
+            <img src="/images/goodhearing.jpeg" alt="" class="right header-image" />
+        </div>
+        <div class="title">
+            <h1>Reddit Newsletter</h1>
+        </div>
+    </div>
 
-                    <tr>
-                        <td bgcolor="#ee4c50" style="padding: 30px 30px 30px 30px;">
-                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
-                                <tr>
-                                    <td style="color: #ffffff; font-family: Arial, sans-serif; font-size: 14px;" width="75%">
-                                        &reg; All Rights Reserved<br/>
-                                        <a href="#" style="color: #ffffff;"><font color="#ffffff">Unsubscribe</font></a>
-                                    </td>
-                                    <td align="right" width="25%">
-                                        <table border="0" cellpadding="0" cellspacing="0">
-                                            <tr>
-                                                <td style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold;">
-                                                    <a href="http://www.facebook.com/" style="color: #ffffff;">
-                                                        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/tw.gif" alt="Twitter" width="38" height="38" style="display: block;" border="0" />
-                                                    </a>
-                                                </td>
-                                                <td style="font-size: 0; line-height: 0;" width="20">&nbsp;</td>
-                                                <td style="font-family: Arial, sans-serif; font-size: 12px; font-weight: bold;">
-                                                    <a href="http://www.twitter.com/" style="color: #ffffff;">
-                                                        <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/fb.gif" alt="Facebook" width="38" height="38" style="display: block;" border="0" />
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+    <div class="content">
+        <div name="greetings">
+            <h1>Hello {{content.userName}}, </h1>    
+            <h1>See yesterday’s top voted posts from your favorite channel  </h1>
+        </div>
+        <div class="posts">
+            {{#each content.reddit}}
+            <div>
+                <div class="subreddit-header">
+                    <h2>
+                        {{this.channel}}: <a href={{this.url}} target="_blank">{{this.url}}</a>
+                    </h2>
+                </div>
+                {{#each this.topPosts}}
+                <div>
+                    <div name="thumbnail">
+                        {{#if this.thumbnail}}<img src={{this.thumbnail}} class="thumbnail">{{/if}}
+                    </div>
+
+                    <div class="post-details">
+                        <div class="post-rating"><span class="rating-span">{{this.rating}}K</span></div>
+                        <div class="post-title">{{this.title}} </div>                        
+                    </div>                    
+                    <hr>
+                </div>    
+                {{/each}}                                   
+            </div>  
+            {{/each}}        
+        </div>
+    </div>
+
+    <div class="footer" hidden>
+        <table class="footer">
+            <tr>
+                <td>
+                    &reg; All Rights Reserved<br/>
+                    <a href="#">Unsubscribe</a>
+                </td>
+                <td align="right">
+                    <table>
+                        <tr>
+                            <td>
+                                <a href="http://www.facebook.com/">
+                                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/tw.gif" alt="Twitter"/>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="http://www.twitter.com/">
+                                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/210284/fb.gif" alt="Facebook" />
+                                </a>
+                            </td>
+                        </tr>
+                    </table>   
+                </td>
+            </tr>
+        </table>                                     
+    </div>
+
 </body>
 </html>
