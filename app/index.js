@@ -53,8 +53,8 @@ app.use((req, res, next) => {
   next(err);
 });
 
-// Start the server
-app.listen(PORT, () => {
+// Start the server, and store the reference in server
+let server = app.listen(PORT, () => {
   logger.info({
     Welcome: "The Reddit Newsletter App is running",
     ENV: process.env.NODE_ENV,
@@ -68,4 +68,5 @@ app.listen(PORT, () => {
   service.newsletterService();
 });
 
-module.exports = app;
+// export the server for testing purposes
+module.exports = server;

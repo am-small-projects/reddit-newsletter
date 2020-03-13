@@ -2,17 +2,20 @@ const { expect } = require("chai"); // for assertions and expectations
 const request = require("supertest"); // for http requests
 const { createSandbox, assert } = require("sinon"); // for sandbox, stubbing and mocking
 const controller = require("../../src/controller");
-const server = require("../../../app");
+const service = require("../../src/service");
 
 const sandbox = createSandbox();
 
 describe("Unit Tests: Router", () => {
+  let server;
   let controllerAddUserStub;
   let controllerUpdateUserStub;
   let controllerUpdateSubscriptionStub;
   let controllerAddFavoriteChannelStub;
+  let serviceNewsletterStub;
   beforeEach(async () => {
-    // stub the functions
+    // initialize or stub the various things
+    server = require("../../../app");
     controllerAddUserStub = sandbox.stub(controller, "addUser");
     controllerUpdateUserStub = sandbox.stub(controller, "updateUser");
     controllerUpdateSubscriptionStub = sandbox.stub(
@@ -23,9 +26,11 @@ describe("Unit Tests: Router", () => {
       controller,
       "addFavoriteChannel"
     );
+    serviceNewsletterStub = sandbox.stub(service, "newsletterService");
   });
-  afterEach(async () => {
+  afterEach(async () => {    
     sandbox.restore();
+    await server.close();
   });
 
   describe("Route: POST /user", () => {
@@ -126,6 +131,7 @@ describe("Unit Tests: Router", () => {
       };
       const funcResponse = "6a109d3e-b4b5-452b-b0de-b5d1f0583860";
       controllerAddUserStub.resolves(funcResponse);
+      serviceNewsletterStub.resolves();
 
       request(server)
         .post("/user/newsletter/subscribe")
@@ -150,6 +156,7 @@ describe("Unit Tests: Router", () => {
       };
       const funcResponse = false;
       controllerAddUserStub.resolves(funcResponse);
+      serviceNewsletterStub.resolves();
 
       request(server)
         .post("/user/newsletter/subscribe")
@@ -172,6 +179,7 @@ describe("Unit Tests: Router", () => {
       };
       const reqParam = "first.last@something.com";
       controllerUpdateSubscriptionStub.resolves(true);
+      serviceNewsletterStub.resolves();
 
       request(server)
         .patch(`/user/${reqParam}/newsletter/preferences`)
@@ -194,6 +202,7 @@ describe("Unit Tests: Router", () => {
       };
       const reqParam = "first.last@something.com";
       controllerUpdateSubscriptionStub.resolves(false);
+      serviceNewsletterStub.resolves();
 
       request(server)
         .patch(`/user/${reqParam}/newsletter/preferences`)
