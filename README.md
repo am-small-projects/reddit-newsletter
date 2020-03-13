@@ -25,7 +25,7 @@ docker-compose run liquibase liquibase update
 # Interact with the Postgres Server in the Docker Container
 - connect to the docker container: 
 ```
-docker exec -it CONTAINER_NAME /bin/bash
+docker exec -it postgis /bin/bash
 ```
 - connect to the DB within the container (on the command prompt):
 ```

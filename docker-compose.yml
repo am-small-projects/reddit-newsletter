@@ -5,11 +5,11 @@ version: "3"
 services:
   api:
     container_name: api
-    build: ./app
+    build: .
     # dont set volumes if the WORKDIR is set in the Dockerfile
     # but do set volumes if you want hot-reload!
     volumes:
-      - ./app:/usr/app     # all files/folders will be mapped 
+      - .:/usr/app     # all files/folders will be mapped 
       - /usr/app/node_modules # node_modules will not be mapped b/w the host computer and the container
     command: npm run start:dev
     depends_on:

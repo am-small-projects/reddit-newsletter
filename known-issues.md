@@ -1,0 +1,3 @@
+- Unit tests are failing due to maybe the server object not cleaning up after each test
+- I dont know how to include the HTML in the email body
+- The Cron job is not working on the `daily X AM/PM in a timezone` setting (it works on a `every min` setting)

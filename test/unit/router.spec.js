@@ -1,8 +1,8 @@
 const { expect } = require("chai"); // for assertions and expectations
 const request = require("supertest"); // for http requests
 const { createSandbox, assert } = require("sinon"); // for sandbox, stubbing and mocking
-const controller = require("../../src/controller");
-const service = require("../../src/service");
+const controller = require("../../app/src/controller");
+const service = require("../../app/src/service");
 
 const sandbox = createSandbox();
 
@@ -15,7 +15,7 @@ describe("Unit Tests: Router", () => {
   let serviceNewsletterStub;
   beforeEach(async () => {
     // initialize or stub the various things
-    server = require("../../../app");
+    server = require("../../app");
     controllerAddUserStub = sandbox.stub(controller, "addUser");
     controllerUpdateUserStub = sandbox.stub(controller, "updateUser");
     controllerUpdateSubscriptionStub = sandbox.stub(

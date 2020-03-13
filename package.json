@@ -20,8 +20,8 @@
   },
   "homepage": "https://github.com/afshanaman81/reddit-newsletter#readme",
   "scripts": {
-    "start": "node index.js",
-    "start:dev": "nodemon index.js",
+    "start": "node ./app/index.js",
+    "start:dev": "nodemon ./app/index.js",
     "test": "nyc mocha --exit --timeout=20000 test/unit --recursive",
     "lint": "eslint --ext=js .",
     "prettier-watch": "onchange '**/*.js' -- prettier --write {{changed}}"
