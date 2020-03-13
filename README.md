@@ -1,6 +1,13 @@
 # reddit-newsletter
 A Nodejs service which sends out a personalized daily email newsletter at 8 am containing top 3 most voted posts (within the last 24 hours) from the user’s favorite sub-reddit channels.
 
+# Setup
+- clone the repo: `git clone git@github.com:afshanaman81/reddit-newsletter.git`
+
+- cd to the main folder: `cd reddit-newsletter` 
+
+- then run the following commands
+
 # API & Postgres
 The following commands will build and run the necessary services (Node API, Liquibase DB Change Management Service, PostGIS Database Server)
 
